@@ -14,22 +14,25 @@ function generatePostID() {
 	return nextPostID;
 }
 
-function addPost()
+function createNewPost()
 {
-	var userInput = window.prompt("Make a new post", "");
+	// alert("Hello World");
+	var text = window.prompt("Enter a post.", "");
+	var trueOrFalse;
+	var post;
+	try
+	{
+		trueOrFalse = confirm("True?");
+	}
+	catch(err) 
+	{
+		trueOrFalse = false;
+	}
 	
-	var table = document.getElementById("main_table");
-	var rowCount = table.rows.length;
-	var newRow = table.insertRow(rowCount);
-
-	var newCell = newRow.insertCell(0);
-
-	newCell.innerHTML = newCell.innerHTML + '<hr> <p>' + userInput + '</p></hr>';
-
-
+	if(trueOrFalse == "true") post = new Post(text, trueOrFalse);
+	else post = new Post(text, trueOrFalse)
+	post.setColor();
 }
-
-
 
 
 class Post {
@@ -38,8 +41,30 @@ class Post {
 		this.tf = tf;
 		this.timestamp = date.getTime();
 		this.postID = generatePostID();
+		this.color;
+	}
+	setColor(tf)
+	{
+		if(tf) this.color = "blue";
+		else this.color = "red";
 	}
 
 }
+
+
+
+
+	//Move to Board Class when we have one. 
+	// addPost()
+	// {
+	// 	var table = document.getElementById("main_table");
+	// 	var rowCount = table.rows.length;
+	// 	var newRow = table.insertRow(rowCount);
+	// 	newRow.id = "main_table_row_" + rowCount;
+	// 	var newCell = newRow.insertCell(0);
+	// 	newCell.innerHTML = newCell.innerHTML + '<hr><p>' + this.text + '</p>';
+	// 	if(this.tf == true) document.getElementById(newRow.id).style.color = "blue";
+	// 	else document.getElementById(newRow.id).style.color = "red";
+	// }	
 
 
