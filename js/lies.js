@@ -39,10 +39,18 @@ class Post {
 		this.timestamp = date.getTime();
 		this.postID = generatePostID();
 		this.responses = [];
+		this.num_truth = 0;
+		this.num_false = 0;
 	}
 
-	addResponse(response_tf) {
-		responses.append({response_tf, data.getTime()});
+	addResponse(response) {
+		if (response) this.num_truth += 1;
+		if (!response) this.num_false += 1;
+		this.responses.push(response);
+	}
+
+	truthRate() {
+		return this.num_truth/(this.num_truth + this.num_false);
 	}
 
 }
