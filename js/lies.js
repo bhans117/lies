@@ -22,6 +22,11 @@ class Post {
 		this.tf = tf;
 		this.timestamp = date.getTime();
 		this.postID = generatePostID();
+		this.responses = [];
+	}
+
+	addResponse(response_tf) {
+		responses.append({response_tf, data.getTime()});
 	}
 
 }
