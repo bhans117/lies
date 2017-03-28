@@ -17,10 +17,13 @@ function generatePostID() {
 
 function createNewPost()
 {
-	// alert("Hello World");
 	var text = window.prompt("Enter a post.", "");
 	var trueOrFalse;
 	var post;
+	
+	//This is a really crufty way of doing "T/F boolean values. 
+	//If the user presses ok on the confirm thing, it won't err out and 
+	//return true, otherwise it will err out in which case we assign false. 
 	try
 	{
 		trueOrFalse = confirm("True?");
@@ -66,8 +69,18 @@ class Post {
 
 
 
+//Implement User Class here
 
+
+
+
+
+
+
+
+//Implement Board Class here. 	
 	//Move to Board Class when we have one. 
+
 	// addPost()
 	// {
 	// 	var table = document.getElementById("main_table");

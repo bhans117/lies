@@ -1,0 +1,9 @@
+Goals for next week:
+    implement board class
+        should have a populate method that populates the board. 
+    implement user class                 |
+        implement a board for your posts |
+    work on a way to input a post better
+        Create a way to
+    implement a 'mini database' with json objects so that we
+        can have persistence
