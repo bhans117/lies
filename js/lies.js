@@ -3,6 +3,28 @@
 var date = new Date();
 var nextPostID = 0;
 
+var MongoClient = require('mongodb'); //.MongoClient;
+
+MongoClient.connect("mongodb://localhost:27017/testDB", function(err, db) {
+	if(!err)
+	{
+		console.log("We are connected.");
+		var collection = db.collection("example");
+		// var doc = { name : 'Evan'};
+		// collection.insert(doc);
+		collection.find({"name" : "Evan"}).forEach(function(obj)
+			{
+				console.log(obj._id)
+			})
+	}
+	else
+	{
+		console.log("Connection Failure.");
+	}
+})
+
+
+
 function error(string) {
 	alert("Error: " + string);
 	console.log("Error: " + string);
@@ -64,18 +86,11 @@ class Post {
 		if(tf) this.color = "blue";
 		else this.color = "red";
 	}
-
 }
 
 
 
 //Implement User Class here
-
-
-
-
-
-
 
 
 //Implement Board Class here. 	
