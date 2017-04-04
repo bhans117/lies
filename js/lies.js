@@ -2,6 +2,8 @@
 // global
 var date = new Date();
 var nextPostID = 0;
+var gusers = new Map();
+var gposts = new Map();
 
 function error(string) {
 	alert("Error: " + string);
@@ -50,10 +52,10 @@ class Post {
 		this.color = "black";
 	}
 
-	addResponse(userID, response) {
+	addResponse(responderID, response) {
 		if (response) this.num_truth += 1;
 		if (!response) this.num_false += 1;
-		this.responses[userID] = response;
+		this.responses[responderID] = response;
 	}
 
 	truthRate() {
@@ -79,6 +81,7 @@ class User {
 
 	addPost (post) {
 		this.posts.set(post.postID,post);
+		gposts
 	}
 
 	getPost (postID) {
@@ -120,11 +123,44 @@ class User {
 }
 
 var user1 = new User("bhans", "11462", "brhansen3@wisc.edu");
+gusers.set(user1.getUserID, user1);
 user1.addPost (new Post("hello I am Tim", false));
 
 
 
+class Board {
+	constructor(userID) {
+		this.userID = userID;
+		this.posts = gposts;
+	}
 
+	addPost (post) {
+		this.posts.set(post.postID,post);
+	}
+
+	getPost (postID) {
+		return this.posts.get(postID);
+	}
+
+	getPostIDs() {
+		return this.posts.keys();
+	}
+
+	populate() {
+		// implement the list items here
+	}
+
+	respond(postID, postOwnerID, postResponderID, response) {
+		postOwner = users.get(postOwnerID);
+		postResponder = users.get(postResponderID);
+		if (postOwner === undefined || postResponder === undefined) {
+			error(userID + " does not exist");
+		}
+		post = gposts.get(postID);
+		post.addResponse(postResponderID, response);
+		
+	}
+}
 
 
 
