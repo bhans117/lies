@@ -5,6 +5,28 @@ var nextPostID = 0;
 var gusers = new Map();
 var gposts = new Map();
 
+var MongoClient = require('mongodb'); //.MongoClient;
+
+MongoClient.connect("mongodb://localhost:27017/testDB", function(err, db) {
+	if(!err)
+	{
+		console.log("We are connected.");
+		var collection = db.collection("example");
+		var doc = { name : 'Evan'};
+		collection.insert(doc);
+		collection.find({"name" : "Evan"}).forEach(function(obj)
+			{
+				console.log(obj._id)
+			})
+	}
+	else
+	{
+		console.log("Connection Failure.");
+	}
+})
+
+
+
 function error(string) {
 	alert("Error: " + string);
 	console.log("Error: " + string);
@@ -66,7 +88,6 @@ class Post {
 		if(tf) this.color = "blue";
 		else this.color = "red";
 	}
-
 }
 
 class User {
@@ -92,8 +113,8 @@ class User {
 		return this.posts.keys();
 	}
 
-	respondToPost(post, tf) {
-		this.reactedPosts.set(post,tf); 
+	respondToPost(postID, tf) {
+		this.reactedPosts.set(postID,tf); 
 	}
 
 	setUserID(userID) {
@@ -112,6 +133,16 @@ class User {
 		return this.password;
 	}
 
+	updateTricked(postID, response) {
+		var post = posts.get(postID);
+		if (post === undefined) {
+			error(postID + " does not exist in " this.userID);
+		}
+		if (post.tf !== response) {
+			this.setNumTricked(this.getNumTricked() + 1);
+		}
+	}
+
 	setNumTricked (num) {
 		this.posts.num_tricked = num;
 	}
@@ -127,57 +158,59 @@ gusers.set(user1.getUserID, user1);
 user1.addPost (new Post("hello I am Tim", false));
 
 
-
 class Board {
 	constructor(userID) {
 		this.userID = userID;
 		this.posts = gposts;
 	}
 
-	addPost (post) {
-		this.posts.set(post.postID,post);
+	addLocalPost () {
+		// make a call to server to add  to the local post list
 	}
 
-	getPost (postID) {
+	makeNewPost () {
+		// construct a post and add it to the user post list and global post list
+		
+	}
+
+	getLocalPost (postID) {
 		return this.posts.get(postID);
 	}
 
-	getPostIDs() {
+	getLocalPostIDs() {
 		return this.posts.keys();
 	}
 
-	populate() {
-		// implement the list items here
-	}
-
 	respond(postID, postOwnerID, postResponderID, response) {
-		postOwner = users.get(postOwnerID);
-		postResponder = users.get(postResponderID);
+		var postOwner = users.get(postOwnerID);
+		var postResponder = users.get(postResponderID);
 		if (postOwner === undefined || postResponder === undefined) {
 			error(userID + " does not exist");
 		}
-		post = gposts.get(postID);
+		var post = gposts.get(postID);
+		if (post === undefined) {
+			error(postID + " does not exist");
+		}
 		post.addResponse(postResponderID, response);
-		
+		postResponder.respondToPost(postID, response);
+		postOwner.updateTricked(postID, response);
 	}
+
+	populatePost(postID)
+	{
+		var post = gposts.get(postID);
+		if (post === undefined) {
+			error(postID + " does not exist");
+		}
+		var table = document.getElementById("main_table");
+		var rowCount = table.rows.length;
+		var newRow = table.insertRow(rowCount);
+		newRow.id = "main_table_row_" + rowCount;
+		var newCell = newRow.insertCell(0);
+		newCell.innerHTML = newCell.innerHTML + '<hr><p>' + post.text + '</p>';
+		if(post.tf == true) document.getElementById(newRow.id).style.color = "blue";
+		else document.getElementById(newRow.id).style.color = "red";
+	}	
 }
-
-
-
-
-//Implement Board Class here. 	
-	//Move to Board Class when we have one. 
-
-	// addPost()
-	// {
-	// 	var table = document.getElementById("main_table");
-	// 	var rowCount = table.rows.length;
-	// 	var newRow = table.insertRow(rowCount);
-	// 	newRow.id = "main_table_row_" + rowCount;
-	// 	var newCell = newRow.insertCell(0);
-	// 	newCell.innerHTML = newCell.innerHTML + '<hr><p>' + this.text + '</p>';
-	// 	if(this.tf == true) document.getElementById(newRow.id).style.color = "blue";
-	// 	else document.getElementById(newRow.id).style.color = "red";
-	// }	
 
 
