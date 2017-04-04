@@ -67,9 +67,60 @@ class Post {
 
 }
 
+class User {
+	constructor(userID, password, email) {
+		this.userID = userID;
+		this.password = password;
+		this.email = email;
+		this.num_tricked = 0;
+		this.posts = new Map();
+		this.reactedPosts = new Map();
+	}
 
+	addPost (post) {
+		this.posts.set(post.postID,post);
+	}
 
-//Implement User Class here
+	getPost (postID) {
+		return this.posts.get(postID);
+	}
+
+	getPostIDs() {
+		return this.posts.keys();
+	}
+
+	respondToPost(post, tf) {
+		this.reactedPosts.set(post,tf); 
+	}
+
+	setUserID(userID) {
+		this.userID = userID;
+	}
+
+	getUserID() {
+		return this.userID;
+	}
+
+	setPassword(password) {
+		this.password = password;
+	}
+
+	getPassword() {
+		return this.password;
+	}
+
+	setNumTricked (num) {
+		this.posts.num_tricked = num;
+	}
+
+	getNumTricked() {
+		return this.posts.num_tricked;
+	}
+
+}
+
+var user1 = new User("bhans", "11462", "brhansen3@wisc.edu");
+user1.addPost (new Post("hello I am Tim", false));
 
 
 
